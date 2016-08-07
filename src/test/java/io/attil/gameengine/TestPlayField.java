@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import io.attil.intermediumcore.BaseMessage;
+import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Mediator;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,7 +20,7 @@ public class TestPlayField {
 	private Mediator mediator;
 	
 	@Mock
-	private BaseMessage message;
+	private Message message;
 	
 	@Before
 	public void setUp() {

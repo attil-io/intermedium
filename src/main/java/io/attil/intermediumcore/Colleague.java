@@ -2,6 +2,6 @@ package io.attil.intermediumcore;
 
 public interface Colleague {
 
-	void onMessage(BaseMessage message);
+	void onMessage(Message message);
 
 }

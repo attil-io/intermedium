@@ -1,6 +1,6 @@
 package io.attil.gameengine;
 
-import io.attil.intermediumcore.BaseMessage;
+import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Colleague;
 import io.attil.intermediumcore.Mediator;
 
@@ -18,7 +18,7 @@ public abstract class GameObject implements Colleague {
 	}
 	
 	@Override
-	public abstract void onMessage(BaseMessage message);
+	public abstract void onMessage(Message message);
 
 	public int getPosX() {
 		return posX;

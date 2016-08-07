@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import io.attil.gameengine.GameMediator;
-import io.attil.intermediumcore.BaseMessage;
+import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Colleague;
 
 
@@ -30,7 +30,7 @@ public class TestGameMediator {
 	private Colleague recipient;
 
 	@Mock
-	private BaseMessage message;
+	private Message message;
 	
 	@Before
 	public void setUp() {
@@ -95,7 +95,7 @@ public class TestGameMediator {
 	public void testMessageNotReceivedBySender() {
 		mediator.addObject(gameObject);
 		mediator.sendMessage(gameObject, message);
-		verify(gameObject, times(0)).onMessage(any(BaseMessage.class));
+		verify(gameObject, times(0)).onMessage(any(Message.class));
 	}
 	
 	@Test

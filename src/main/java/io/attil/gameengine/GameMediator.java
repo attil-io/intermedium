@@ -3,7 +3,7 @@ package io.attil.gameengine;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.attil.intermediumcore.BaseMessage;
+import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Colleague;
 import io.attil.intermediumcore.Mediator;
 
@@ -28,7 +28,7 @@ public class GameMediator implements Mediator {
 	}
 
 	@Override
-	public void sendMessage(Colleague sender, BaseMessage message) {
+	public void sendMessage(Colleague sender, Message message) {
 		if (null == sender) {
 			throw new IllegalArgumentException("sender should not be null");
 		}
