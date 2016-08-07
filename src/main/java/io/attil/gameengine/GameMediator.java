@@ -1,7 +1,11 @@
-package io.attil.intermediumcore;
+package io.attil.gameengine;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import io.attil.intermediumcore.BaseMessage;
+import io.attil.intermediumcore.Colleague;
+import io.attil.intermediumcore.Mediator;
 
 public class GameMediator implements Mediator {
 

@@ -1,4 +1,4 @@
-package io.attil.intermediumcore;
+package io.attil.gameengine;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -12,6 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import io.attil.gameengine.GameMediator;
+import io.attil.intermediumcore.BaseMessage;
+import io.attil.intermediumcore.Colleague;
 
 
 @RunWith(MockitoJUnitRunner.class)
