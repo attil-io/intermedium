@@ -1,6 +1,5 @@
 package io.attil.gameengine;
 
-import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Mediator;
 
 public class PlayField extends GameObject {
@@ -10,8 +9,8 @@ public class PlayField extends GameObject {
 	}
 
 	@Override
-	public void onMessage(Message message) {
-
+	public void onCollision(CollisionMessage message) {
+		
 	}
 
 }

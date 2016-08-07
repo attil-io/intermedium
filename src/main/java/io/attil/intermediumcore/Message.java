@@ -1,20 +1,16 @@
 package io.attil.intermediumcore;
 
-public class Message {
+public abstract class Message {
 	
-	private int type;
 	private Colleague sender;
 	
-	public Message(int type, Colleague sender) {
-		this.type = type;
+	public Message(Colleague sender) {
 		this.sender = sender;
-	}
-	
-	public int getType() {
-		return type;
 	}
 	
 	public Colleague getSender() {
 		return sender;
 	}
+	
+	public abstract void dispatchMessage();
 }

@@ -20,7 +20,7 @@ public class TestPlayField {
 	private Mediator mediator;
 	
 	@Mock
-	private Message message;
+	private CollisionMessage collisionMessage;
 	
 	@Before
 	public void setUp() {
@@ -40,15 +40,15 @@ public class TestPlayField {
 	}
 
 	@Test
-	public void testMessageSpeedUnchanged() {
-		playField.onMessage(message);
+	public void testCollisionSpeedUnchanged() {
+		playField.onCollision(collisionMessage);
 		assertEquals(0, playField.getSpeedX());
 		assertEquals(0, playField.getSpeedY());
 	}
 
 	@Test
 	public void testMessagePositionUnchanged() {
-		playField.onMessage(message);
+		playField.onCollision(collisionMessage);
 		assertEquals(0, playField.getPosX());
 		assertEquals(0, playField.getPosY());
 	}

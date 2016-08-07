@@ -18,8 +18,12 @@ public abstract class GameObject implements Colleague {
 	}
 	
 	@Override
-	public abstract void onMessage(Message message);
+	public void onMessage(Message message) {
+		message.dispatchMessage();
+	}
 
+	public abstract void onCollision(CollisionMessage message);
+	
 	public int getPosX() {
 		return posX;
 	}
