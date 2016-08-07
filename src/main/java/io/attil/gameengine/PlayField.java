@@ -34,4 +34,9 @@ public class PlayField extends GameObject {
 		}
 	}
 
+	@Override
+	public void doAStep() {
+		
+	}
+
 }
