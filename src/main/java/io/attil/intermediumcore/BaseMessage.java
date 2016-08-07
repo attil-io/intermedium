@@ -1,5 +1,5 @@
 package io.attil.intermediumcore;
 
-public class GameMessage {
+public interface BaseMessage {
 
 }

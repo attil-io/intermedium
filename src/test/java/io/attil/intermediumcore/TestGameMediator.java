@@ -20,13 +20,13 @@ public class TestGameMediator {
 	private GameMediator mediator;
 	
 	@Mock
-	private GameObject gameObject;
+	private Colleague gameObject;
 
 	@Mock
-	private GameObject recipient;
+	private Colleague recipient;
 
 	@Mock
-	private GameMessage message;
+	private BaseMessage message;
 	
 	@Before
 	public void setUp() {
@@ -91,7 +91,7 @@ public class TestGameMediator {
 	public void testMessageNotReceivedBySender() {
 		mediator.addObject(gameObject);
 		mediator.sendMessage(gameObject, message);
-		verify(gameObject, times(0)).onMessage(any(GameMessage.class));
+		verify(gameObject, times(0)).onMessage(any(BaseMessage.class));
 	}
 	
 	@Test
