@@ -23,6 +23,8 @@ public abstract class GameObject implements Colleague {
 	}
 
 	public abstract void onCollision(CollisionMessage message);
+
+	public abstract void onMove(GameObject sender, int deltaX, int deltaY);
 	
 	public int getPosX() {
 		return posX;

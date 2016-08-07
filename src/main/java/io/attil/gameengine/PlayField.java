@@ -13,4 +13,9 @@ public class PlayField extends GameObject {
 		
 	}
 
+	@Override
+	public void onMove(GameObject sender, int deltaX, int deltaY) {
+
+	}
+
 }
