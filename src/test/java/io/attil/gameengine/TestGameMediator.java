@@ -38,6 +38,9 @@ public class TestGameMediator {
 	private Colleague recipient3;
 	
 	@Mock
+	private Colleague recipient4;
+
+	@Mock
 	private Message message;
 
 	@Mock
@@ -81,6 +84,54 @@ public class TestGameMediator {
 		catch (IllegalArgumentException e) {
 			// expected
 		}
+	}
+	
+	@Test
+	public void testAddDuringIteration() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.addObject(recipient);
+				return null;
+			}
+		}).when(recipient2).onMessage(eq(message));
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient2);
+		mediator.addObject(recipient3);
+		mediator.sendMessage(gameObject, message);
+		verify(recipient2, times(1)).onMessage(eq(message));
+		verify(recipient3, times(1)).onMessage(eq(message));
+		verify(recipient, times(0)).onMessage(any(Message.class));
+		assertEquals(4, mediator.countObjects());
+	}
+
+	@Test
+	public void testAddAfterNestedIteration() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.addObject(recipient);
+				mediator.sendMessage(recipient3, message2);
+				return null;
+			}
+		}).when(recipient3).onMessage(eq(message));
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.addObject(recipient2);
+				return null;
+			}
+		}).when(recipient4).onMessage(eq(message));
+		
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient3);
+		mediator.addObject(recipient4);
+		mediator.sendMessage(gameObject, message);
+		verify(recipient3, times(1)).onMessage(eq(message));
+		verify(recipient4, times(1)).onMessage(eq(message));
+		verify(recipient, times(0)).onMessage(any(Message.class));
+		verify(recipient2, times(0)).onMessage(any(Message.class));
+		assertEquals(5, mediator.countObjects());
 	}
 	
 	@Test

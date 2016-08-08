@@ -12,6 +12,7 @@ public class GameMediator implements Mediator {
 	private List<Colleague> colleagues = new LinkedList<>();
 	private int iterationLevel = 0;
 	private List<Colleague> toRemove = new LinkedList<>();
+	private List<Colleague> toAdd = new LinkedList<>();
 	
 	public int countObjects() {
 		return colleagues.size();
@@ -24,7 +25,13 @@ public class GameMediator implements Mediator {
 		if (isRegistered(colleague)) {
 			throw new IllegalStateException("colleague already present in this mediator");
 		}
-		colleagues.add(colleague);
+		final boolean isIterating = (0 != iterationLevel);
+		if (!isIterating) {
+			colleagues.add(colleague);
+		}
+		else {
+			toAdd.add(colleague);
+		}
 	}
 
 	@Override
@@ -46,6 +53,7 @@ public class GameMediator implements Mediator {
 		}
 		--iterationLevel;
 		doRemovals();
+		doAdditions();
 	}
 
 	private void doRemovals() {
@@ -57,6 +65,14 @@ public class GameMediator implements Mediator {
 		}
 	}
 	
+	private void doAdditions() {
+		if (0 == iterationLevel) {
+			for (Colleague c : toAdd) {
+				addObject(c);
+			}
+		}
+	}
+
 	private boolean isRegistered(Colleague colleague) {
 		for (Colleague c : colleagues) {
 			if (c == colleague) {
