@@ -3,6 +3,7 @@ package io.attil.gameengine;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -10,7 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import io.attil.gameengine.GameMediator;
 import io.attil.intermediumcore.Message;
@@ -28,6 +31,9 @@ public class TestGameMediator {
 	@Mock
 	private Colleague recipient;
 
+	@Mock
+	private Colleague recipient2;
+	
 	@Mock
 	private Message message;
 	
@@ -118,4 +124,68 @@ public class TestGameMediator {
 			// expected
 		}
 	}
+	
+
+	@Test
+	public void testRemoveObject() {
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient);
+		mediator.addObject(recipient2);
+		mediator.remove(recipient);
+		mediator.sendMessage(gameObject, message);
+		verify(recipient2, times(1)).onMessage(eq(message));
+		assertEquals(2, mediator.countObjects());
+	}
+
+	@Test
+	public void testRemoveNonExistingObject() {
+		try {
+			mediator.remove(recipient);
+			fail("exception expected");
+		}
+		catch (IllegalStateException e) {
+			// expected
+		}
+	}
+	
+	
+	@Test
+	public void testRemoveObjectDuringIteration() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.remove(recipient);
+				return null;
+			}
+		}).when(recipient).onMessage(eq(message));
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient);
+		mediator.addObject(recipient2);
+		mediator.sendMessage(gameObject, message);
+		verify(recipient2, times(1)).onMessage(eq(message));
+		assertEquals(2, mediator.countObjects());
+	}
+
+	@Test
+	public void testRemoveNonexistingObjectDuringIteration() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.remove(recipient);
+				return null;
+			}
+		}).when(recipient2).onMessage(eq(message));
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient2);
+		try {
+			mediator.sendMessage(gameObject, message);
+			fail("exception expected");
+		}
+		catch (IllegalStateException e) {
+			// expected
+		}
+		verify(recipient2, times(1)).onMessage(eq(message));
+		assertEquals(2, mediator.countObjects());
+	}
+
 }

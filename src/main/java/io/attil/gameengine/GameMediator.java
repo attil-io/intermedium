@@ -10,6 +10,8 @@ import io.attil.intermediumcore.Mediator;
 public class GameMediator implements Mediator {
 
 	private List<Colleague> gameObjects = new LinkedList<>();
+	private boolean isIterating = false;
+	private List<Colleague> toRemove = new LinkedList<>();
 	
 	public int countObjects() {
 		return gameObjects.size();
@@ -38,10 +40,15 @@ public class GameMediator implements Mediator {
 		else if (!isRegistered(sender)) {
 			throw new IllegalStateException("sender is not registered");
 		}
+		isIterating = true;
 		for (Colleague go : gameObjects) {
 			if (go != sender) {
 				go.onMessage(message);
 			}
+		}
+		isIterating = false;
+		for (Colleague c : toRemove) {
+			gameObjects.remove(c);
 		}
 	}
 
@@ -52,5 +59,28 @@ public class GameMediator implements Mediator {
 			}
 		}
 		return false;
+	}
+
+	public void remove(Colleague colleague) {
+		boolean wasRemoved = false;
+		if (!isIterating) {
+			int idx = 0;
+			for (Colleague go : gameObjects) {
+				if (go == colleague) {
+					gameObjects.remove(idx);
+					wasRemoved = true;
+					break;
+				}
+				++idx;
+			}
+		}
+		else if (isRegistered(colleague)) {
+			toRemove.add(colleague);
+			wasRemoved = true;
+		}
+		
+		if (!wasRemoved) {
+			throw new IllegalStateException("object was not found");
+		}
 	}
 }
