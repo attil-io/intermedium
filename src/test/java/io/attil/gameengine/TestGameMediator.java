@@ -154,6 +154,16 @@ public class TestGameMediator {
 		}
 	}
 	
+	@Test
+	public void testRemoveNullNotAllowed() {
+		try {
+			mediator.remove(null);
+			fail("exception expected");
+		}
+		catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
 	
 	@Test
 	public void testRemoveObjectDuringIteration() {

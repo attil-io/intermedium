@@ -67,6 +67,9 @@ public class GameMediator implements Mediator {
 	}
 
 	public void remove(Colleague colleague) {
+		if (null == colleague) {
+			throw new IllegalArgumentException("colleague is null");
+		}
 		boolean wasRemoved = false;
 		final boolean isIterating = (0 != iterationLevel);
 		if (!isIterating) {
