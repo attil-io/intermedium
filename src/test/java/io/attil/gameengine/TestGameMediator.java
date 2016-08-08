@@ -133,6 +133,41 @@ public class TestGameMediator {
 		verify(recipient2, times(0)).onMessage(any(Message.class));
 		assertEquals(5, mediator.countObjects());
 	}
+
+	@Test
+	public void testAddAfterTwoIterations() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.addObject(recipient);
+				return null;
+			}
+		}).when(recipient3).onMessage(eq(message));
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.addObject(recipient2);
+				return null;
+			}
+		}).when(recipient4).onMessage(eq(message));
+		
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient3);
+		mediator.sendMessage(gameObject, message);
+
+		mediator.remove(recipient);
+		mediator.remove(recipient3);
+		
+		mediator.addObject(recipient4);
+		mediator.sendMessage(gameObject, message);
+
+		
+		verify(recipient, times(0)).onMessage(any(Message.class));
+		verify(recipient2, times(0)).onMessage(any(Message.class));
+		verify(recipient3, times(1)).onMessage(eq(message));
+		verify(recipient4, times(1)).onMessage(eq(message));
+		assertEquals(3, mediator.countObjects());
+	}
 	
 	@Test
 	public void testMessageReceivedByOtherObject() {

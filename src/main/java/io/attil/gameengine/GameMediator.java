@@ -70,6 +70,7 @@ public class GameMediator implements Mediator {
 			for (Colleague c : toAdd) {
 				addObject(c);
 			}
+			toAdd.clear();
 		}
 	}
 
