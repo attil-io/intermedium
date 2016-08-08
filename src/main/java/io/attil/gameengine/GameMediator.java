@@ -2,11 +2,10 @@ package io.attil.gameengine;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
-import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Colleague;
 import io.attil.intermediumcore.Mediator;
+import io.attil.intermediumcore.Message;
 
 public class GameMediator implements Mediator {
 
@@ -48,13 +47,18 @@ public class GameMediator implements Mediator {
 			}
 		}
 		--iterationLevel;
-		if (0 == iterationLevel) {
-			for (Colleague c : toRemove) {
-				gameObjects.remove(c);
-			}
-		}
+		doRemovals();
 	}
 
+	private void doRemovals() {
+		if (0 == iterationLevel) {
+			for (Colleague c : toRemove) {
+				remove(c);
+			}
+			toRemove.clear();
+		}
+	}
+	
 	private boolean isRegistered(Colleague gameObject) {
 		for (Colleague go : gameObjects) {
 			if (go == gameObject) {

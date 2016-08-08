@@ -222,4 +222,36 @@ public class TestGameMediator {
 		assertEquals(2, mediator.countObjects());
 	}
 
+	@Test
+	public void testRemoveObjectAfterTwoIterations() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.remove(recipient);
+				return null;
+			}
+		}).when(recipient).onMessage(eq(message));
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.remove(recipient2);
+				return null;
+			}
+		}).when(recipient2).onMessage(eq(message));
+		
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient);
+		mediator.addObject(recipient3);
+		mediator.sendMessage(gameObject, message);
+
+		mediator.addObject(recipient2);
+		mediator.sendMessage(gameObject, message);
+
+		
+		verify(recipient, times(1)).onMessage(eq(message));
+		verify(recipient2, times(1)).onMessage(eq(message));
+		verify(recipient3, times(2)).onMessage(eq(message));
+		assertEquals(2, mediator.countObjects());
+	}
+
 }
