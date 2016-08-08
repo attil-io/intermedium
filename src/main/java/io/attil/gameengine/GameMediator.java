@@ -9,24 +9,22 @@ import io.attil.intermediumcore.Message;
 
 public class GameMediator implements Mediator {
 
-	private List<Colleague> gameObjects = new LinkedList<>();
+	private List<Colleague> colleagues = new LinkedList<>();
 	private int iterationLevel = 0;
 	private List<Colleague> toRemove = new LinkedList<>();
 	
 	public int countObjects() {
-		return gameObjects.size();
+		return colleagues.size();
 	}
 
-	public void addObject(Colleague gameObject) {
-		if (null == gameObject) {
-			throw new IllegalArgumentException("gameObject is null");
+	public void addObject(Colleague colleague) {
+		if (null == colleague) {
+			throw new IllegalArgumentException("colleague is null");
 		}
-		for (Colleague go : gameObjects) {
-			if (go == gameObject) {
-				throw new IllegalStateException("gameobject already present in this mediator");
-			}
+		if (isRegistered(colleague)) {
+			throw new IllegalStateException("colleague already present in this mediator");
 		}
-		gameObjects.add(gameObject);
+		colleagues.add(colleague);
 	}
 
 	@Override
@@ -41,9 +39,9 @@ public class GameMediator implements Mediator {
 			throw new IllegalStateException("sender is not registered");
 		}
 		++iterationLevel;
-		for (Colleague go : gameObjects) {
-			if (go != sender) {
-				go.onMessage(message);
+		for (Colleague colleague : colleagues) {
+			if (colleague != sender) {
+				colleague.onMessage(message);
 			}
 		}
 		--iterationLevel;
@@ -59,9 +57,9 @@ public class GameMediator implements Mediator {
 		}
 	}
 	
-	private boolean isRegistered(Colleague gameObject) {
-		for (Colleague go : gameObjects) {
-			if (go == gameObject) {
+	private boolean isRegistered(Colleague colleague) {
+		for (Colleague c : colleagues) {
+			if (c == colleague) {
 				return true;
 			}
 		}
@@ -73,9 +71,9 @@ public class GameMediator implements Mediator {
 		final boolean isIterating = (0 != iterationLevel);
 		if (!isIterating) {
 			int idx = 0;
-			for (Colleague go : gameObjects) {
-				if (go == colleague) {
-					gameObjects.remove(idx);
+			for (Colleague c : colleagues) {
+				if (c == colleague) {
+					colleagues.remove(idx);
 					wasRemoved = true;
 					break;
 				}
