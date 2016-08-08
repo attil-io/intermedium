@@ -2,6 +2,7 @@ package io.attil.gameengine;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import io.attil.intermediumcore.Message;
 import io.attil.intermediumcore.Colleague;
@@ -10,7 +11,7 @@ import io.attil.intermediumcore.Mediator;
 public class GameMediator implements Mediator {
 
 	private List<Colleague> gameObjects = new LinkedList<>();
-	private boolean isIterating = false;
+	private int iterationLevel = 0;
 	private List<Colleague> toRemove = new LinkedList<>();
 	
 	public int countObjects() {
@@ -40,15 +41,17 @@ public class GameMediator implements Mediator {
 		else if (!isRegistered(sender)) {
 			throw new IllegalStateException("sender is not registered");
 		}
-		isIterating = true;
+		++iterationLevel;
 		for (Colleague go : gameObjects) {
 			if (go != sender) {
 				go.onMessage(message);
 			}
 		}
-		isIterating = false;
-		for (Colleague c : toRemove) {
-			gameObjects.remove(c);
+		--iterationLevel;
+		if (0 == iterationLevel) {
+			for (Colleague c : toRemove) {
+				gameObjects.remove(c);
+			}
 		}
 	}
 
@@ -63,6 +66,7 @@ public class GameMediator implements Mediator {
 
 	public void remove(Colleague colleague) {
 		boolean wasRemoved = false;
+		final boolean isIterating = (0 != iterationLevel);
 		if (!isIterating) {
 			int idx = 0;
 			for (Colleague go : gameObjects) {

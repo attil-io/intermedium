@@ -35,7 +35,13 @@ public class TestGameMediator {
 	private Colleague recipient2;
 	
 	@Mock
+	private Colleague recipient3;
+	
+	@Mock
 	private Message message;
+
+	@Mock
+	private Message message2;
 	
 	@Before
 	public void setUp() {
@@ -184,6 +190,34 @@ public class TestGameMediator {
 		catch (IllegalStateException e) {
 			// expected
 		}
+		verify(recipient2, times(1)).onMessage(eq(message));
+		assertEquals(2, mediator.countObjects());
+	}
+
+
+	@Test
+	public void testRemoveObjectAfterNestedIteration() {
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.remove(recipient);
+				mediator.sendMessage(recipient, message2);
+				return null;
+			}
+		}).when(recipient).onMessage(eq(message));
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				mediator.remove(recipient2);
+				return null;
+			}
+		}).when(recipient2).onMessage(eq(message));
+		
+		mediator.addObject(gameObject);
+		mediator.addObject(recipient);
+		mediator.addObject(recipient2);
+		mediator.addObject(recipient3);
+		mediator.sendMessage(gameObject, message);
 		verify(recipient2, times(1)).onMessage(eq(message));
 		assertEquals(2, mediator.countObjects());
 	}
